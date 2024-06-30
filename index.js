@@ -107,8 +107,13 @@ async function fetchPicture(page, { width, height, center, zoom, type, timeout }
   } catch {
     return { error: `Timeout exceeded (${timeout}ms)` };
   }
-  const scrShot = await page.screenshot({ type }); // returns a Buffer
-  return { buffer: scrShot };
+
+  //const scrShot = await page.screenshot({ type, omitBackground: true, optimizeForSpeed: true }); // returns a Buffer
+  const scrShot = await page.evaluate(() => {
+    return map.getCanvas().toDataURL();
+  });
+  console.log(scrShot);
+  return {buffer: scrShot};
 }
 
 const mimeTypes = {
@@ -142,7 +147,10 @@ parseMapStyles()
         if (error) {
           res.status(400).send(error);
         } else {
-          res.contentType(mimeTypes[params.type]).end(buffer, 'binary');
+          //res.contentType(mimeTypes[params.type]).end(buffer, 'binary');
+          s1 = buffer.split(";", 2);
+          s2 = s1[1].split(",", 2);
+          res.contentType(s1[0]).end(s2[1], s2[0]);
         }
       });
     });

@@ -8,6 +8,7 @@ const map = new Map({
   center: [0, 0],
   zoom: 9,
   interactive: false,
+  preserveDrawingBuffer: true
 });
 map.on('idle', () => {
   document.body.classList.remove('loading');
