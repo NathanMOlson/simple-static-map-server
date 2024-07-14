@@ -109,9 +109,9 @@ async function fetchPicture(page, { width, height, center, zoom, type, timeout }
   }
 
   //const scrShot = await page.screenshot({ type, omitBackground: true, optimizeForSpeed: true }); // returns a Buffer
-  const scrShot = await page.evaluate(() => {
-    return map.getCanvas().toDataURL();
-  });
+  const scrShot = await page.evaluate(type => {
+    return map.getCanvas().toDataURL(type);
+  }, mimeTypes[type]);
   return {buffer: scrShot};
 }
 
