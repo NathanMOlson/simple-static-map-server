@@ -83,7 +83,7 @@ const getPage = (tabs, styleName) => {
   return tab.page;
 };
 
-async function fetchPicture(page, { width, height, center, zoom, type, timeout }) {
+async function fetchPicture(page, { width, height, center, zoom, roll, pitch, yaw, type, timeout }) {
   await page.setViewport({ width, height });
   const error = await page.evaluate(
     view => {
@@ -97,7 +97,7 @@ async function fetchPicture(page, { width, height, center, zoom, type, timeout }
         return 'Error, check the query parameters.';
       }
     },
-    { zoom, center }
+    { zoom, center, pitch, bearing: yaw }
   );
   if (error) {
     return { error };
@@ -125,6 +125,9 @@ function parseQuery(query, styleNames) {
     width: Number(query.width) || 400,
     height: Number(query.height) || 400,
     zoom: Number(query.zoom) || 3,
+    roll: Number(query.roll) || 0.0,
+    pitch: Number(query.pitch) || 0.0,
+    yaw: Number(query.yaw) || 0.0,
     center: query.center ? query.center.split(',').map(Number) : [0, 0],
     type: Object.keys(mimeTypes).includes(query.type) ? query.type : 'png',
     style: query.style || styleNames[0],
