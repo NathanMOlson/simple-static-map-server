@@ -112,7 +112,6 @@ async function fetchPicture(page, { width, height, center, zoom, type, timeout }
   const scrShot = await page.evaluate(() => {
     return map.getCanvas().toDataURL();
   });
-  console.log(scrShot);
   return {buffer: scrShot};
 }
 
